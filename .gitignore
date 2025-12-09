@@ -1,0 +1,7 @@
+node_modules/
+models/*.glb
+*.glb
+temp_script.py
+.env
+*.log
+.DS_Store
