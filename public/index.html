@@ -6,13 +6,13 @@
   <title>AI 3D Generator</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600&display=swap');
-    
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     :root {
       --bg-dark: #0a0a0f;
       --bg-card: #151520;
@@ -21,7 +21,7 @@
       --text: #e8e8f0;
       --text-dim: #9090a8;
     }
-    
+
     body {
       font-family: 'Outfit', sans-serif;
       background: var(--bg-dark);
@@ -29,7 +29,7 @@
       overflow-x: hidden;
       min-height: 100vh;
     }
-    
+
     .container {
       max-width: 1400px;
       margin: 0 auto;
@@ -39,7 +39,7 @@
       gap: 2rem;
       min-height: 100vh;
     }
-    
+
     .panel {
       background: var(--bg-card);
       border-radius: 16px;
@@ -47,7 +47,7 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
     }
-    
+
     h1 {
       font-family: 'Space Mono', monospace;
       font-size: 2rem;
@@ -57,18 +57,18 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    
+
     .subtitle {
       color: var(--text-dim);
       font-size: 0.9rem;
       margin-bottom: 2rem;
       font-weight: 300;
     }
-    
+
     .input-group {
       margin-bottom: 1.5rem;
     }
-    
+
     label {
       display: block;
       font-size: 0.85rem;
@@ -78,7 +78,7 @@
       margin-bottom: 0.5rem;
       font-weight: 600;
     }
-    
+
     textarea {
       width: 100%;
       padding: 1rem;
@@ -92,13 +92,13 @@
       min-height: 120px;
       transition: all 0.3s ease;
     }
-    
+
     textarea:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 20px var(--accent-dim);
     }
-    
+
     button {
       width: 100%;
       padding: 1rem;
@@ -116,18 +116,18 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     button:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 30px var(--accent-dim);
     }
-    
+
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
     }
-    
+
     button::before {
       content: '';
       position: absolute;
@@ -138,11 +138,11 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
       transition: left 0.5s;
     }
-    
+
     button:hover::before {
       left: 100%;
     }
-    
+
     .status {
       margin-top: 1rem;
       padding: 1rem;
@@ -153,17 +153,17 @@
       font-size: 0.85rem;
       display: none;
     }
-    
+
     .status.show {
       display: block;
       animation: slideIn 0.3s ease;
     }
-    
+
     .status.error {
       border-left-color: #ff3366;
       color: #ff3366;
     }
-    
+
     #viewer {
       position: relative;
       background: var(--bg-dark);
@@ -175,29 +175,29 @@
       justify-content: center;
       min-height: 600px;
     }
-    
+
     #canvas {
       width: 100%;
       height: 100%;
       display: block;
     }
-    
+
     .placeholder {
       text-align: center;
       color: var(--text-dim);
       padding: 3rem;
     }
-    
+
     .placeholder-icon {
       font-size: 4rem;
       margin-bottom: 1rem;
       opacity: 0.3;
     }
-    
+
     .examples {
       margin-top: 1.5rem;
     }
-    
+
     .examples h3 {
       font-size: 0.85rem;
       text-transform: uppercase;
@@ -205,13 +205,13 @@
       color: var(--text-dim);
       margin-bottom: 0.75rem;
     }
-    
+
     .example-chips {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    
+
     .chip {
       padding: 0.5rem 1rem;
       background: var(--bg-dark);
@@ -221,13 +221,13 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    
+
     .chip:hover {
       background: var(--accent-dim);
       border-color: var(--accent);
       transform: translateY(-2px);
     }
-    
+
     @keyframes slideIn {
       from {
         opacity: 0;
@@ -238,7 +238,7 @@
         transform: translateY(0);
       }
     }
-    
+
     .loading {
       display: inline-block;
       width: 12px;
@@ -249,11 +249,11 @@
       animation: spin 0.8s linear infinite;
       margin-left: 8px;
     }
-    
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    
+
     @media (max-width: 1024px) {
       .container {
         grid-template-columns: 1fr;
@@ -266,21 +266,21 @@
     <div class="panel">
       <h1>AI 3D Generator</h1>
       <p class="subtitle">Blender × Gemini で 3D モデルを生成</p>
-      
+
       <div class="input-group">
         <label for="prompt">プロンプト</label>
-        <textarea 
-          id="prompt" 
+        <textarea
+          id="prompt"
           placeholder="例: 兎の3Dモデルを作成してください"
         ></textarea>
       </div>
-      
+
       <button id="generateBtn">
         Generate Model
       </button>
-      
+
       <div id="status" class="status"></div>
-      
+
       <div class="examples">
         <h3>サンプル</h3>
         <div class="example-chips">
@@ -299,7 +299,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="panel" id="viewer">
       <div class="placeholder">
         <div class="placeholder-icon">🎨</div>
@@ -316,7 +316,7 @@
       }
     }
   </script>
-  
+
   <script type="module">
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -326,7 +326,7 @@
     const generateBtn = document.getElementById('generateBtn');
     const statusDiv = document.getElementById('status');
     const viewerDiv = document.getElementById('viewer');
-    
+
     let scene, camera, renderer, controls, currentModel;
 
     // Three.jsシーンの初期化
@@ -334,7 +334,7 @@
       // シーンを作成
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0x0a0a0f);
-      
+
       // カメラ
       camera = new THREE.PerspectiveCamera(
         50,
@@ -343,42 +343,42 @@
         1000
       );
       camera.position.set(5, 5, 5);
-      
+
       // レンダラー
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(viewerDiv.clientWidth, viewerDiv.clientHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.shadowMap.enabled = true;
-      
+
       // 既存のキャンバスを削除
       const existingCanvas = viewerDiv.querySelector('canvas');
       if (existingCanvas) existingCanvas.remove();
-      
+
       viewerDiv.innerHTML = '';
       viewerDiv.appendChild(renderer.domElement);
-      
+
       // コントロール
       controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      
+
       // ライト
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
       scene.add(ambientLight);
-      
+
       const directionalLight = new THREE.DirectionalLight(0x00ff88, 0.8);
       directionalLight.position.set(5, 10, 5);
       directionalLight.castShadow = true;
       scene.add(directionalLight);
-      
+
       const backLight = new THREE.DirectionalLight(0x00ccff, 0.5);
       backLight.position.set(-5, 5, -5);
       scene.add(backLight);
-      
+
       // グリッド
       const gridHelper = new THREE.GridHelper(10, 10, 0x00ff88, 0x202030);
       scene.add(gridHelper);
-      
+
       // アニメーションループ
       function animate() {
         requestAnimationFrame(animate);
@@ -386,7 +386,7 @@
         renderer.render(scene, camera);
       }
       animate();
-      
+
       // リサイズ対応
       window.addEventListener('resize', () => {
         camera.aspect = viewerDiv.clientWidth / viewerDiv.clientHeight;
@@ -398,7 +398,7 @@
     // モデルを読み込む
     function loadModel(url) {
       const loader = new GLTFLoader();
-      
+
       loader.load(
         url,
         (gltf) => {
@@ -406,25 +406,25 @@
           if (currentModel) {
             scene.remove(currentModel);
           }
-          
+
           currentModel = gltf.scene;
           scene.add(currentModel);
-          
+
           // モデルをセンタリング
           const box = new THREE.Box3().setFromObject(currentModel);
           const center = box.getCenter(new THREE.Vector3());
           currentModel.position.sub(center);
-          
+
           // カメラ位置を調整
           const size = box.getSize(new THREE.Vector3());
           const maxDim = Math.max(size.x, size.y, size.z);
           const fov = camera.fov * (Math.PI / 180);
           const cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5;
-          
+
           camera.position.set(cameraZ, cameraZ, cameraZ);
           camera.lookAt(0, 0, 0);
           controls.update();
-          
+
           showStatus('モデルの読み込みが完了しました', false);
         },
         (progress) => {
@@ -448,16 +448,16 @@
     // モデル生成
     async function generateModel() {
       const prompt = promptInput.value.trim();
-      
+
       if (!prompt) {
         showStatus('プロンプトを入力してください', true);
         return;
       }
-      
+
       generateBtn.disabled = true;
       generateBtn.innerHTML = '生成中<span class="loading"></span>';
       showStatus('AIがBlenderスクリプトを生成中...', false);
-      
+
       try {
         const response = await fetch('http://localhost:3000/generate', {
           method: 'POST',
@@ -466,15 +466,15 @@
           },
           body: JSON.stringify({ prompt })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
           showStatus('3Dモデルを読み込み中...', false);
-          
+
           // シーンを初期化（まだの場合）
           if (!scene) initScene();
-          
+
           // モデルを読み込む
           loadModel('http://localhost:3000' + data.modelUrl);
         } else {
@@ -491,13 +491,13 @@
 
     // イベントリスナー
     generateBtn.addEventListener('click', generateModel);
-    
+
     promptInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
         generateModel();
       }
     });
-    
+
     // サンプルチップのクリック
     document.querySelectorAll('.chip[data-prompt]').forEach(chip => {
       chip.addEventListener('click', () => {

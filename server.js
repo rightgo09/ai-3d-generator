@@ -35,26 +35,26 @@ app.get('/api/models', async (req, res) => {
 // モデル生成エンドポイント
 app.post('/generate', async (req, res) => {
   const { prompt } = req.body;
-  
+
   if (!prompt) {
     return res.status(400).json({ error: 'プロンプトが必要です' });
   }
 
   try {
     console.log(`プロンプトを受信: ${prompt}`);
-    
+
     // 1. Gemini APIを呼び出してBlender Pythonスクリプトを生成
     const blenderScript = await generateBlenderScript(prompt);
     console.log('Blenderスクリプトを生成しました');
-    
+
     // 2. スクリプトをファイルに保存
     const scriptPath = path.join(__dirname, 'temp_script.py');
     await fs.writeFile(scriptPath, blenderScript);
-    
+
     // 3. Blenderを実行してGLBファイルを生成
     const modelFilename = `model_${Date.now()}.glb`;
     const modelPath = path.join(__dirname, 'models', modelFilename);
-    
+
     await runBlender(scriptPath, modelPath);
 
     // ファイルが生成されたか確認
@@ -71,19 +71,19 @@ app.post('/generate', async (req, res) => {
 
     // 4. 一時ファイルを削除
     await fs.unlink(scriptPath);
-    
+
     // 5. モデルのURLを返す
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       modelUrl: `/models/${modelFilename}`,
       message: 'モデルの生成に成功しました'
     });
-    
+
   } catch (error) {
     console.error('エラー:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'モデルの生成に失敗しました',
-      details: error.message 
+      details: error.message
     });
   }
 });
@@ -167,21 +167,21 @@ function runBlender(scriptPath, outputPath) {
   return new Promise((resolve, reject) => {
     // Blenderのパスを確認
     const blenderCommand = 'blender'; // システムのPATHにBlenderがある場合
-    
+
     const args = [
       '--background',
       '--python', scriptPath,
       '--', outputPath
     ];
-    
+
     const blenderProcess = spawn(blenderCommand, args);
-    
+
     let stderr = '';
-    
+
     blenderProcess.stderr.on('data', (data) => {
       stderr += data.toString();
     });
-    
+
     blenderProcess.on('close', (code) => {
       if (code === 0) {
         resolve();
@@ -189,7 +189,7 @@ function runBlender(scriptPath, outputPath) {
         reject(new Error(`Blender exited with code ${code}: ${stderr}`));
       }
     });
-    
+
     blenderProcess.on('error', (error) => {
       reject(new Error(`Blenderの実行に失敗: ${error.message}`));
     });
